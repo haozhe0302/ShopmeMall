@@ -13,4 +13,9 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    <modules>
+        <module>ShopmeCommon</module>
+        <module>ShopmeWebParent</module>
+    </modules>
+
 </project>

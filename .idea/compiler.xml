@@ -8,7 +8,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="ShopmeCommon" />
         <module name="ShopmeFrontEnd" />
-        <module name="ShopmeMall" />
         <module name="ShopmeBackEnd" />
       </profile>
     </annotationProcessing>

@@ -1,6 +1,7 @@
 package com.shopme.common.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
@@ -21,6 +22,10 @@ public class Role {
 
     public Role(String name) {
         this.name = name;
+    }
+
+    public Role(Integer id) {
+        this.id = id;
     }
 
     public Role(String name, String description) {
@@ -50,5 +55,25 @@ public class Role {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Role)) return false;
+        Role role = (Role) o;
+        return Objects.equals(getId(), role.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

@@ -78,6 +78,10 @@
         <a th:href="@{/users/new}">Create New User</a>
     </div>
 
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
     <div>
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="table-dark"> <!--In the lastest version of bootstrap use table-dark instead of thead-dark -->

@@ -131,6 +131,26 @@
         </div>
     </form>
 
+    <!-- Dialog Box -->
+    <div class="modal fade text-center" id="modalDialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalTitle">Warning</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="modalBody"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-warning" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="text-center">
         <p>Shopme Control Panel - Copyright &copy; Shopme</p>
     </div>
@@ -152,14 +172,24 @@
         $.post(url, params, function(response){
             if (response == "Successful"){
                 form.submit();
+            } else if (response == "Duplicated"){
+                showModalDialog("Warning", "Email address has already been registered : " + userEmail);
+            } else{
+                showModalDialog("Error", "Unknown response from server");
             }
-            else if (response == "Duplicated"){
-                alert("Email address has already been registered : " + userEmail);
-            }
+        }).fail(function(){
+            showModalDialog("Error", "Could not connect to server");
         });
 
         return false;
     }
+
+    function showModalDialog(title, message){
+        $("#modalTitle").text(title);
+        $("#modalBody").text(message);
+        $("#modalDialog").modal('show');
+    }
+
 </script>
 
 </body>

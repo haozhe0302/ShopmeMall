@@ -73,6 +73,15 @@ public class UserService {
         } catch (NoSuchElementException ex){
             throw new UsernameNotFoundException("Could not find user with ID " + id);
         }
+    }
 
+    public void delete(Integer id) throws UsernameNotFoundException{
+        Long countById =  userRepo.countById(id);
+
+        if(countById == null || countById == 0){
+            throw new UsernameNotFoundException("Could not find user with ID " + id);
+        }
+
+        userRepo.deleteById(id);
     }
 }

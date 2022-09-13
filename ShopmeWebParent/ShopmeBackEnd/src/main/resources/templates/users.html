@@ -136,8 +136,8 @@
     <div>
         <nav>
             <ul class="pagination flex-wrap justify-content-center">
-                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{/users/page/1}">First</a></li>
-                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${currentPage - 1}}">&laquo;</a></li>
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{/users/page/1}">&laquo;</a></li>
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${currentPage - 1}}">&lt;</a></li>
 
                 <!-- List all pages -->
                 <!--
@@ -151,8 +151,8 @@
                     <a class="page-link" th:href="@{'/users/page/' + ${i}}">[[${i}]]</a>
                 </li>
 
-                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${currentPage + 1}}">&raquo;</a></li>
-                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${totalPages}}">Last</a></li>
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${currentPage + 1}}">&gt;</a></li>
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${totalPages}}">&raquo;</a></li>
             </ul>
         </nav>
     </div>

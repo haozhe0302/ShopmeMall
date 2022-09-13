@@ -124,6 +124,39 @@
         </table>
     </div>
 
+    <!-- Pagination -->
+    <div class="text-center m-1" th:if="${totalItems > 0}">
+        <span>Showing User # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+    </div>
+
+    <div class="text-center m-1" th:unless="${totalItems > 0}">
+        <span>No User Found</span>
+    </div>
+
+    <div>
+        <nav>
+            <ul class="pagination flex-wrap justify-content-center">
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{/users/page/1}">&laquo;</a></li>
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${currentPage - 1}}">&lt;</a></li>
+
+                <!-- List all pages -->
+                <!--
+                <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
+                    <a class="page-link" th:href="@{'/users/page/' + ${i}}">[[${i}]]</a>
+                </li>
+                -->
+
+                <!-- List only 5 pages (± 2 pages) -->
+                <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                    <a class="page-link" th:href="@{'/users/page/' + ${i}}">[[${i}]]</a>
+                </li>
+
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${currentPage + 1}}">&gt;</a></li>
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${totalPages}}">&raquo;</a></li>
+            </ul>
+        </nav>
+    </div>
+
     <!-- Dialog Box -->
     <div class="modal fade text-center" id="confirmModal">
         <div class="modal-dialog">

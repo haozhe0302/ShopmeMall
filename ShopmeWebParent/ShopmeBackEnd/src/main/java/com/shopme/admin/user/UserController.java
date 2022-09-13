@@ -1,5 +1,7 @@
 package com.shopme.admin.user;
 
+import java.util.*;
+
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.common.entity.User;
 import com.shopme.common.entity.Role;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,9 +32,39 @@ public class UserController {
     private UserService service;
 
     @GetMapping("/users")
+    public String listFirstPage(Model model){
+        return listByPage(1, model);
+    }
+
+    @GetMapping("/users/listAll")
     public String listAll(Model model){
         List<User> listUsers = service.listAll();
         model.addAttribute("listUsers", listUsers);
+        return "users";
+    }
+
+    @GetMapping("/users/page/{pageNum}")
+    public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model) {
+        Page<User> page = service.listByPage(pageNum);
+        List<User> listUsers = page.getContent();
+        // System.out.println("PageNum = " + pageNum);
+        // System.out.println("Total Elements = " + page.getTotalElements());
+        // System.out.println("Total Pages = " + page.getTotalPages());
+        long startCount = (pageNum - 1) * UserService.USER_PRE_PAGE + 1;
+        long endCount = (startCount) + UserService.USER_PRE_PAGE - 1;
+        if (endCount > page.getTotalElements()){
+            endCount = page.getTotalElements();
+        }
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("startPage", Math.max(1, pageNum - 2));
+        model.addAttribute("endPage", Math.min(page.getTotalPages(), pageNum + 2));
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listUsers", listUsers);
+
         return "users";
     }
 

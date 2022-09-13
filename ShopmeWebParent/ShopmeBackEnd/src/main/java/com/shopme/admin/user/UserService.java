@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -14,6 +17,8 @@ import java.util.NoSuchElementException;
 @Service
 @Transactional
 public class UserService {
+    public static final int USER_PRE_PAGE = 10;
+
     @Autowired
     private UserRepository userRepo;
 
@@ -25,6 +30,11 @@ public class UserService {
 
     public List<User> listAll(){
         return (List<User>) userRepo.findAll();
+    }
+
+    public Page<User> listByPage(int pageNum){
+        Pageable pageable = PageRequest.of(pageNum - 1, USER_PRE_PAGE);
+        return userRepo.findAll(pageable);
     }
 
     public List<Role> listRoles(){
@@ -55,11 +65,13 @@ public class UserService {
     public boolean isEmailUnique(Integer id, String email){
         User userByEmail = userRepo.getUserByEmail(email);
 
-        if (userByEmail == null) return true;
+        if (userByEmail == null)
+            return true;
 
         // New Account Mode
         if (id == null){
-            if (userByEmail != null) return false;
+            if (userByEmail != null)
+                return false;
         // User Edit Mode
         } else{
             if (userByEmail.getId() != id){

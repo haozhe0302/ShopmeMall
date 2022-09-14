@@ -146,12 +146,12 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("/users/{id}/enabled/{status}/page/{currentPage}")
-    public String updateUserEnabledStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean enabled, @PathVariable("currentPage") Integer currentPage, RedirectAttributes redirectAttributes){
+    @GetMapping("/users/{id}/enabled/{status}")
+    public String updateUserEnabledStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean enabled, @Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("redirPage") Integer redirPage, RedirectAttributes redirectAttributes){
         service.updateEnabledStatus(id, enabled);
         String status = enabled? "enabled" : "disabled";
         String message = "The user ID " + id + " has been " + status;
         redirectAttributes.addFlashAttribute("message", message);
-        return "redirect:/users/page/" + currentPage;
+        return "redirect:/users/page/" + redirPage + "?sortField=" + sortField + "&sortDir=" + sortDir;
     }
 }

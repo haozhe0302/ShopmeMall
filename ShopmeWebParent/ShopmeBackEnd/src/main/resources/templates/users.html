@@ -85,6 +85,21 @@
     </div>
 
     <div>
+        <form th:action="@{/users/page/1}" class="form-inline m-3">
+            <input type="hidden" name="sortField" th:value="${sortField}"/>
+            <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+
+            <label>
+                <input type="search" name="keyword" th:value="${keyword}" class="form-control" style="width: 200px;" required />
+            </label>
+            &nbsp;&nbsp;
+            <input type="submit" value="Search" class="btn btn-primary" />
+            &nbsp;&nbsp;
+            <input type="button" value="Clear" class="btn btn-secondary" />
+        </form>
+    </div>
+
+    <div>
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="table-dark"> <!--In the lastest version of bootstrap use table-dark instead of thead-dark -->
                 <tr>
@@ -160,7 +175,7 @@
         <span>No User Found</span>
     </div>
 
-    <div>
+    <div th:if="${totalPages > 1}">
         <nav>
             <ul class="pagination flex-wrap justify-content-center">
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">&laquo;</a></li>

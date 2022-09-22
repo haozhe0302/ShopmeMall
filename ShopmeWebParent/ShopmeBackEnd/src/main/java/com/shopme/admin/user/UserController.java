@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -160,5 +161,12 @@ public class UserController {
         String message = "The user ID " + id + " has been " + status;
         redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/users/page/" + redirPage + "?sortField=" + sortField + "&sortDir=" + sortDir;
+    }
+
+    @GetMapping("/users/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<User> listUsers =  service.listAll();
+        UserCsvExporter exporter = new UserCsvExporter();
+        exporter.export(listUsers, response);
     }
 }

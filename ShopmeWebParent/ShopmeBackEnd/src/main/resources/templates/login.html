@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0"/>
+
+    <title>Login - Shopme Admin</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container-fluid text-center">
+    <div>
+        <img th:src="@{/images/ShopmeAdminBig.png}" />
+    </div>
+
+    <form th:action="@{/login}" method="post" style="max-width: 400px; margin: 0 auto">
+        <div class="border border-secondary rounded p-3">
+            <p><b>Shopme Control Panel Access</b></p>
+            <p>
+                <input type="email" name="email" class="form-control" placeholder="Email" required/>
+            </p>
+            <p>
+                <input type="password" name="password" class="form-control" placeholder="Password" required/>
+            </p>
+            <p>
+                <input type="submit" value="Login" class="btn btn-primary" />
+            </p>
+        </div>
+    </form>
+
+    <div class="text-center">
+        <p>Shopme Control Panel - Copyright &copy; Shopme</p>
+    </div>
+
+    <!-- Cute Poka Bird. just for fun.  -->
+    <div class="poka" style="position: fixed; left: 0; bottom: 0; z-index: 2;">
+        <a class="poka"><img src="https://cdn.hinatazaka46.com/files/14/hinata/pages/hinachri2020/assets/images/poka.gif" height="120" width="120"></a>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0"/>
@@ -7,6 +7,8 @@
     <title>Home - Shopme Admin</title>
 
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
     <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" ></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" ></script>
 </head>
@@ -66,6 +68,18 @@
 
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/settings}">Settings</a>
+                    </li>
+
+                    <!-- User Account Icon  -->
+                    <li>
+                        <span class="fas fa-user fa-2x icon-silver"></span>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" sec:authentication="principal.fullname">Settings</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href=""></a>
+                        </div>
                     </li>
                 </ul>
             </div>

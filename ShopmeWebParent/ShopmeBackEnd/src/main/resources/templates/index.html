@@ -15,6 +15,9 @@
 <body>
 <div class="container-fluid">
     <div>
+        <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+            <input type="submit" />
+        </form>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
             <a class="navbar-brand" th:href="@{/}">
                 <img th:src="@{/images/ShopmeAdminSmall.png}"/>
@@ -78,7 +81,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" sec:authentication="principal.fullname">Settings</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href=""></a>
+                            <a class="dropdown-item" id="logoutLink" href="">Logout</a>
                         </div>
                     </li>
                 </ul>
@@ -101,5 +104,15 @@
     </div>
 
 </div>
+
+<script type="text/javascript">
+    $(function() {
+       $("#logoutLink").on("click", function(e){
+          e.preventDefault();
+          document.logoutForm.submit();
+       });
+    });
+</script>
+
 </body>
 </html>

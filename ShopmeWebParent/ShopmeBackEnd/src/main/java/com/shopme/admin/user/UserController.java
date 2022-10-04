@@ -1,8 +1,9 @@
 package com.shopme.admin.user;
 
-import java.util.*;
-
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.user.export.UserCsvExporter;
+import com.shopme.admin.user.export.UserExcelExporter;
+import com.shopme.admin.user.export.UserPdfExporter;
 import com.shopme.common.entity.User;
 import com.shopme.common.entity.Role;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -19,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -47,8 +46,8 @@ public class UserController {
 
     @GetMapping("/users/page/{pageNum}")
     public String listByPage(@PathVariable(name = "pageNum") int pageNum, @Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword, Model model) {
-        System.out.println("Sort Field: " + sortField);
-        System.out.println("Sort Order: " + sortDir);
+        // System.out.println("Sort Field: " + sortField);
+        // System.out.println("Sort Order: " + sortDir);
 
         Page<User> page = service.listByPage(pageNum, sortField, sortDir, keyword);
         List<User> listUsers = page.getContent();

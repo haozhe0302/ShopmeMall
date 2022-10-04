@@ -67,7 +67,7 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" sec:authentication="principal.fullname">Settings</a>
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" th:href="@{/account}" sec:authentication="principal.fullname">Settings</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" id="logoutLink" href="">Logout</a>
             </div>

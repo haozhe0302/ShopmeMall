@@ -7,7 +7,10 @@
     <div th:replace="navigation :: nav_menu"></div>
 
     <div>
-        <h1>Shopme Admin Control Panel</h1>
+        <h2>Shopme Admin Control Panel</h2>
+        Welcome
+        <a th:href="@{/account}" sec:authentication="principal.fullname"></a>
+        <span sec:authentication="principal.authorities"></span>
     </div>
 
     <div th:replace="fragments :: footer"></div>

@@ -1,8 +1,10 @@
-package com.shopme.admin.user;
-
-import java.util.*;
+package com.shopme.admin.user.controller;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.user.UserService;
+import com.shopme.admin.user.export.UserCsvExporter;
+import com.shopme.admin.user.export.UserExcelExporter;
+import com.shopme.admin.user.export.UserPdfExporter;
 import com.shopme.common.entity.User;
 import com.shopme.common.entity.Role;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -19,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -47,15 +47,15 @@ public class UserController {
 
     @GetMapping("/users/page/{pageNum}")
     public String listByPage(@PathVariable(name = "pageNum") int pageNum, @Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword, Model model) {
-        System.out.println("Sort Field: " + sortField);
-        System.out.println("Sort Order: " + sortDir);
+        // System.out.println("Sort Field: " + sortField);
+        // System.out.println("Sort Order: " + sortDir);
 
         Page<User> page = service.listByPage(pageNum, sortField, sortDir, keyword);
         List<User> listUsers = page.getContent();
         // System.out.println("PageNum = " + pageNum);
         // System.out.println("Total Elements = " + page.getTotalElements());
         // System.out.println("Total Pages = " + page.getTotalPages());
-        long startCount = (pageNum - 1) * UserService.USER_PRE_PAGE + 1;
+        long startCount = (long) (pageNum - 1) * UserService.USER_PRE_PAGE + 1;
         long endCount = (startCount) + UserService.USER_PRE_PAGE - 1;
         if (endCount > page.getTotalElements()){
             endCount = page.getTotalElements();
@@ -76,7 +76,7 @@ public class UserController {
         model.addAttribute("listUsers", listUsers);
         model.addAttribute("keyword", keyword);
 
-        return "users";
+        return "users/users";
     }
 
     @GetMapping("/users/new")
@@ -87,7 +87,7 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("listRoles", listRoles);
         model.addAttribute("pageTitle", "Create New User");
-        return "user_form";
+        return "users/user_form";
     }
 
     @PostMapping("/users/save")
@@ -127,7 +127,7 @@ public class UserController {
             model.addAttribute("user", user);
             model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
             model.addAttribute("listRoles", listRoles);
-            return "user_form";
+            return "users/user_form";
         } catch (UsernameNotFoundException ex){
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
             return "redirect:/users";

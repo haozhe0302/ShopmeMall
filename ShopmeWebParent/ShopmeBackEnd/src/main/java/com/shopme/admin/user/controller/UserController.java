@@ -1,6 +1,7 @@
-package com.shopme.admin.user;
+package com.shopme.admin.user.controller;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.user.UserService;
 import com.shopme.admin.user.export.UserCsvExporter;
 import com.shopme.admin.user.export.UserExcelExporter;
 import com.shopme.admin.user.export.UserPdfExporter;
@@ -54,7 +55,7 @@ public class UserController {
         // System.out.println("PageNum = " + pageNum);
         // System.out.println("Total Elements = " + page.getTotalElements());
         // System.out.println("Total Pages = " + page.getTotalPages());
-        long startCount = (pageNum - 1) * UserService.USER_PRE_PAGE + 1;
+        long startCount = (long) (pageNum - 1) * UserService.USER_PRE_PAGE + 1;
         long endCount = (startCount) + UserService.USER_PRE_PAGE - 1;
         if (endCount > page.getTotalElements()){
             endCount = page.getTotalElements();
@@ -75,7 +76,7 @@ public class UserController {
         model.addAttribute("listUsers", listUsers);
         model.addAttribute("keyword", keyword);
 
-        return "users";
+        return "users/users";
     }
 
     @GetMapping("/users/new")
@@ -86,7 +87,7 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("listRoles", listRoles);
         model.addAttribute("pageTitle", "Create New User");
-        return "user_form";
+        return "users/user_form";
     }
 
     @PostMapping("/users/save")
@@ -126,7 +127,7 @@ public class UserController {
             model.addAttribute("user", user);
             model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
             model.addAttribute("listRoles", listRoles);
-            return "user_form";
+            return "users/user_form";
         } catch (UsernameNotFoundException ex){
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
             return "redirect:/users";

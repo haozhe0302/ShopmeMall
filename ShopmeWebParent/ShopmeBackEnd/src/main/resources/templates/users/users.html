@@ -6,6 +6,7 @@
 <div class="container-fluid">
     <div th:replace="navigation :: nav_menu"></div>
 
+    <!-- User Info Exporter -->
     <div>
         <h2>Manage Users</h2>
         <a th:href="@{/users/new}" class="fa-solid fa-user-plus fa-2x icon-grey mr-2" title="Create New User"></a>
@@ -18,6 +19,7 @@
         [[${message}]]
     </div>
 
+    <!-- User Search Box -->
     <div>
         <form th:action="@{/users/page/1}" class="form-inline m-3">
             <input type="hidden" name="sortField" th:value="${sortField}"/>
@@ -33,6 +35,7 @@
         </form>
     </div>
 
+    <!-- User Info Table -->
     <div class="full-details">
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="table-dark"> <!--In the lastest version of bootstrap use table-dark instead of thead-dark -->

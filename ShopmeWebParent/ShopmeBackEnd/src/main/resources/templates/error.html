@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments :: page_head('Error - Shopme Admin')" />
+
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation :: nav_menu"></div>
+
+    <div class="m-3">
+        <h2>Sorry. There is an unexpected error occurred.</h2>
+    </div>
+
+    <div th:replace="fragments :: footer"></div>
+    <div th:replace="fragments :: poka"></div>
+
+</div>
+
+</body>
+</html>

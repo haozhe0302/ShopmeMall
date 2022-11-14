@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Categories - Shopme Admin')" />
+
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation :: nav_menu"></div>
+
+    <!-- Category Exporter -->
+    <div>
+        <h2>Manage Users</h2>
+        <a th:href="@{/categories/new}" class="fa-solid fa-folder-plus fa-2x icon-grey mr-2" title="Create New Category"></a>
+        <a th:href="@{/categories/export/csv}" class="fa-solid fa-file-csv fa-2x icon-grey mr-2" title="Export to CSV"></a>
+    </div>
+
+    <!-- Category Search Box -->
+    <div>
+        <form th:action="@{/ategories/page/1}" class="form-inline m-3">
+            <label>
+                <input type="search" name="keyword" th:value="${keyword}" class="form-control" style="width: 200px;" required />
+            </label>
+            &nbsp;&nbsp;
+            <button type="submit" class="btn btn-primary" title="Search"><i class="fas fa-search"></i></button>
+            &nbsp;&nbsp;
+            <button type="button" class="btn btn-secondary" onclick="clearFilter()" title="Clear Filter"><i class="fas fa-eraser"></i></button>
+        </form>
+    </div>
+
+    <!-- Category Info Table -->
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="table-dark"> <!--In the lastest version of bootstrap use table-dark instead of thead-dark -->
+                <tr>
+                    <th class="hideable-column">ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Alias</th>
+                    <th>Enabled</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="category : ${listCategories}">
+                    <td class="hideable-column">[[${category.id}]]</td>
+                    <td></td>
+                    <td>[[${category.name}]]</td>
+                    <td>[[${category.alias}]]</td>
+                    <td>
+                        <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green" title = "Disable Category"></a>
+                        <a th:if="${category.enabled == false}" class="fas fa-solid fa-circle-xmark fa-2x icon-grey" title = "Enable Category"></a>
+                    </td>
+                    <td>
+                        <a class="fas fa-edit fa-2x icon-green" title="Edit Category"></a>
+                        &nbsp;
+                        <a class="fas fa-trash fa-2x icon-grey link-delete" title="Delete Category"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:replace="fragments :: footer"></div>
+</div>
+
+</body>
+</html>

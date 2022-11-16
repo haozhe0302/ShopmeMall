@@ -13,6 +13,10 @@
         <a th:href="@{/categories/export/csv}" class="fa-solid fa-file-csv fa-2x icon-grey mr-2" title="Export to CSV"></a>
     </div>
 
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
     <!-- Category Search Box -->
     <div>
         <form th:action="@{/ategories/page/1}" class="form-inline m-3">

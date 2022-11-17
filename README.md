@@ -1,6 +1,6 @@
 # ShopmeMall
  
-A full-stack shopping web app using Java, Spring Boot, Hibernate, Thymeleaf, Bootstrap, jQuery, HTML and RESTful Webservices.
+A full-stack shopping mall web app using Java, Spring Boot, Hibernate, Thymeleaf, Bootstrap, jQuery and RESTful Webservices.
 
 Key Features:
 

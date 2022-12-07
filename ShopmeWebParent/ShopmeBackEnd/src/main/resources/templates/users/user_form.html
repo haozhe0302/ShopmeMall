@@ -104,16 +104,6 @@
 <script type="text/javascript">
     moduleURL = "[[@{/users}]]";
 
-    function showImageThumbnail(fileInput){
-        var file = fileInput.files[0];
-        var reader = new FileReader();
-        reader.onload = function(e){
-            $("#thumbnail").attr("src", e.target.result);
-        };
-
-        reader.readAsDataURL(file);
-    }
-
     function checkEmailUnique(form){
         url = "[[@{/users/check_email}]]";
         userEmail = $("#email").val();
@@ -125,26 +115,44 @@
             if (response == "Successful"){
                 form.submit();
             } else if (response == "Duplicated"){
-                showModalDialog("Warning", "Email address has already been registered : " + userEmail);
+                showWarningModal("Email address has already been registered : " + userEmail);
             } else{
-                showModalDialog("Error", "Unknown response from server");
+                showErrorModal("Unknown response from server");
             }
         }).fail(function(){
-            showModalDialog("Error", "Could not connect to server");
+            showErrorModal("Could not connect to server");
         });
 
         return false;
     }
 
+    function showImageThumbnail(fileInput){
+        var file = fileInput.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e){
+            $("#thumbnail").attr("src", e.target.result);
+        };
+
+        reader.readAsDataURL(file);
+    }
+
     function showModalDialog(title, message){
         $("#modalTitle").text(title);
         $("#modalBody").text(message);
-        $("#modalDialog").modal('show');
+        $("#modalDialog").modal();
+    }
+
+    function showErrorModal(message) {
+        showModalDialog("Error", message);
+    }
+
+    function showWarningModal(message) {
+        showModalDialog("Warning", message);
     }
 
 </script>
 
-<script th:src="@{/js/common_form.js}"></script>
+<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
 
 </body>
 

@@ -9,11 +9,9 @@ $(document).ready(function(){
         if(fileSize > 5242880){
             this.setCustomValidity("The photo size must be < 10MB");
             this.reportValidity();
-        }
-        else{
+        } else{
             this.setCustomValidity("");
             showImageThumbnail(this);
         }
     });
 });
-

@@ -112,15 +112,15 @@
         params = {id: userId, email: userEmail, _csrf: csrfVal};
 
         $.post(url, params, function(response){
-            if (response == "Successful"){
+            if (response === "Successful"){
                 form.submit();
-            } else if (response == "Duplicated"){
-                showWarningModal("Email address has already been registered : " + userEmail);
+            } else if (response === "Duplicated"){
+                showModalDialog("Warning", "Email address has already been registered : " + userEmail);
             } else{
-                showErrorModal("Unknown response from server");
+                showModalDialog("Error", "Unknown response from server");
             }
         }).fail(function(){
-            showErrorModal("Could not connect to server");
+            showModalDialog("Error", "Could not connect to server");
         });
 
         return false;
@@ -139,15 +139,7 @@
     function showModalDialog(title, message){
         $("#modalTitle").text(title);
         $("#modalBody").text(message);
-        $("#modalDialog").modal();
-    }
-
-    function showErrorModal(message) {
-        showModalDialog("Error", message);
-    }
-
-    function showWarningModal(message) {
-        showModalDialog("Warning", message);
+        $("#modalDialog").modal('show');
     }
 
 </script>

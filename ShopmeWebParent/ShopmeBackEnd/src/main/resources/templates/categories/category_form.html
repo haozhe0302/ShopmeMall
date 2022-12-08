@@ -104,14 +104,14 @@
             if (response === "OK") {
                 form.submit();
             } else if (response === "DuplicateName") {
-                showWarningModal("Another category existed with the same name " + catName);
+                showModalDialog("Warning", "Another category existed with the same name " + catName);
             }  else if (response === "DuplicateAlias") {
-                showWarningModal("Another category existed with the same alias " + catAlias);
+                showModalDialog("Warning", "Another category existed with the same alias " + catAlias);
             } else {
-                showErrorModal("Unknown response from server");
+                showModalDialog("Error", "Unknown response from server");
             }
         }).fail(function () {
-            showErrorModal("Could not connect to server");
+            showModalDialog("Error", "Could not connect to server");
         });
 
         return false;
@@ -130,15 +130,7 @@
     function showModalDialog(title, message){
         $("#modalTitle").text(title);
         $("#modalBody").text(message);
-        $("#modalDialog").modal();
-    }
-
-    function showErrorModal(message) {
-        showModalDialog("Error", message);
-    }
-
-    function showWarningModal(message) {
-        showModalDialog("Warning", message);
+        $("#modalDialog").modal('show');
     }
 </script>
 

@@ -10,7 +10,7 @@
         <h2>Manage Categories | [[${pageTitle}]]</h2>
     </div>
 
-    <form th:action="@{/categories/save}" method="post" style="max-width: 700px; margin: 0 auto" enctype="multipart/form-data" th:object="${category}">
+    <form th:action="@{/categories/save}" method="post" style="max-width: 700px; margin: 0 auto" enctype="multipart/form-data" onsubmit="return checkUnique(this)" th:object="${category}">
         <input type="hidden" th:field="*{id}" />
         <div class="border border-secondary rounded p-3">
             <div class="form-group row">
@@ -89,6 +89,34 @@
 <script type="text/javascript">
     moduleURL = "[[@{/categories}]]";
 
+    function checkUnique(form) {
+        catId = $("#id").val()
+        catName = $("#name").val();
+        catAlias = $("#alias").val();
+
+        csrfVal = $("input[name='_csrf']").val();
+
+        url = "[[@{/categories/check_unique}]]";
+
+        params = {id : catId, name : catName, alias : catAlias, _csrf : csrfVal};
+        
+        $.post(url, params, function(response) {
+            if (response === "OK") {
+                form.submit();
+            } else if (response === "DuplicateName") {
+                showModalDialog("Warning", "Another category existed with the same name " + catName);
+            }  else if (response === "DuplicateAlias") {
+                showModalDialog("Warning", "Another category existed with the same alias " + catAlias);
+            } else {
+                showModalDialog("Error", "Unknown response from server");
+            }
+        }).fail(function () {
+            showModalDialog("Error", "Could not connect to server");
+        });
+
+        return false;
+    }
+
     function showImageThumbnail(fileInput){
         var file = fileInput.files[0];
         var reader = new FileReader();
@@ -99,9 +127,14 @@
         reader.readAsDataURL(file);
     }
 
+    function showModalDialog(title, message){
+        $("#modalTitle").text(title);
+        $("#modalBody").text(message);
+        $("#modalDialog").modal('show');
+    }
 </script>
 
-<script th:src="@{/js/common_form.js}"></script>
+<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
 
 </body>
 

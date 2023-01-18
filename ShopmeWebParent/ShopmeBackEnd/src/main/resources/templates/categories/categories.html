@@ -37,7 +37,10 @@
                 <tr>
                     <th class="hideable-column">ID</th>
                     <th>Image</th>
-                    <th>Name</th>
+                    <th>
+                        <a class="text-white" th:href="@{'/categories?sortDir=' + ${reverseSortDir}}">Name</a>
+                        <span th:class="${reverseSortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                    </th>
                     <th>Alias</th>
                     <th>Enabled</th>
                     <th></th>

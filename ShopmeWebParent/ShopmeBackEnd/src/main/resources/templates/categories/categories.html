@@ -60,15 +60,62 @@
                     <td>
                         <a class="fas fa-edit fa-2x icon-green" th:href="@{'/categories/edit/' + ${category.id}}" title="Edit Category"></a>
                         &nbsp;
-                        <a class="fas fa-trash fa-2x icon-grey link-delete" th:href="@{'/categories/delete/' + ${category.id}}" title="Delete Category"></a>
+                        <th:block th:if="${category.hasChildren == false}">
+                            <a class="fas fa-trash fa-2x icon-grey link-delete" th:href="@{'/categories/delete/' + ${category.id}}" th:entityId="${category.id}" title="Delete Category"></a>
+                        </th:block>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
+    <!-- Dialog Box -->
+    <div class="modal fade text-center" id="confirmModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="confirmText"></span><br>
+                    <span id="confirmEmail"></span><br>
+                    <span id="confirmWarning"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <a class="btn btn-success" href="" id="yesButton">Yes</a>
+                    <button type="button" class="btn btn btn-danger" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div th:replace="fragments :: footer"></div>
 </div>
+
+<script type="text/javascript">
+    function showDeleteConfirmModal(link, entityName) {
+        entityId = link.attr("entityId");
+
+        $("#yesButton").attr("href", link.attr("href"));
+        $("#confirmText").text("Are you sure you want to delete this " + entityName + " ID " + entityId + "?")
+        $("#confirmWarning").text("Please note that the DELETE operation is NOT REVERSIBLE");
+        $("#confirmModal").modal('show');
+    }
+
+    function clearFilter() {
+        window.location = "[[@{/categories}]]";
+    }
+
+    $(document).ready(function() {
+       $(".link-delete").on("click", function(e) {
+          e.preventDefault();
+          showDeleteConfirmModal($(this), 'category');
+       });
+    });
+</script>
 
 </body>
 </html>

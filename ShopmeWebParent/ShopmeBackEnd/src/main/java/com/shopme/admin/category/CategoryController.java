@@ -55,7 +55,7 @@ public class CategoryController {
             category.setImage(fileName);
 
             Category savedCategory = service.save(category);
-            String uploadDir = "../category-images/" + savedCategory.getId();
+            String uploadDir = "category-images/" + savedCategory.getId();
 
             FileUploadUtil.cleanDir(uploadDir);
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
@@ -91,6 +91,21 @@ public class CategoryController {
         String status = enabled ? "enabled" : "disabled";
         String message = "The category ID " + id + " has been " + status;
         redirectAttributes.addFlashAttribute("message", message);
+
+        return "redirect:/categories";
+    }
+
+    @GetMapping("/categories/delete/{id}")
+    public String deleteCategory(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            service.delete(id);
+            String categoryDir = "category-images/" + id;
+            FileUploadUtil.removeDir(categoryDir);
+
+            redirectAttributes.addFlashAttribute("message", "The category ID " + id + " has been deleted successfully");
+        } catch (CategoryNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
 
         return "redirect:/categories";
     }

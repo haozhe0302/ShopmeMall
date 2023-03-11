@@ -1,9 +1,9 @@
 package com.shopme.admin.category;
 
 import com.shopme.admin.FileUploadUtil;
-import com.shopme.admin.user.UserService;
 import com.shopme.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +25,14 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public String listFirstPage(@Param("sortDir") String sortDir, Model model) {
-
         return listByPage(1, sortDir, model);
+    }
+
+    @GetMapping("/categories/listAll")
+    public String listAll(Model model){
+        List<Category> listCategories = service.listAll();
+        model.addAttribute("listCategories", listCategories);
+        return "categories/categories";
     }
 
     @GetMapping("/categories/page/{pageNum}")
@@ -38,6 +44,7 @@ public class CategoryController {
 
         CategoryPageInfo pageInfo = new CategoryPageInfo();
         List<Category> listCategories = service.listByPage(pageInfo, pageNum, sortDir);
+
         String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc" ;
 
         long startCount = (long) (pageNum - 1) * CategoryService.CATEGORIES_PRE_PAGE + 1;

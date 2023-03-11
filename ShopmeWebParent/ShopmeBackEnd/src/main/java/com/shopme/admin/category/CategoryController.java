@@ -40,8 +40,8 @@ public class CategoryController {
         List<Category> listCategories = service.listByPage(pageInfo, pageNum, sortDir);
         String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc" ;
 
-        long startCount = (long) (pageNum - 1) * UserService.USER_PRE_PAGE + 1;
-        long endCount = (startCount) + UserService.USER_PRE_PAGE - 1;
+        long startCount = (long) (pageNum - 1) * CategoryService.CATEGORIES_PRE_PAGE + 1;
+        long endCount = (startCount) + CategoryService.CATEGORIES_PRE_PAGE - 1;
         if (endCount > pageInfo.getTotalElements()){
             endCount = pageInfo.getTotalElements();
         }

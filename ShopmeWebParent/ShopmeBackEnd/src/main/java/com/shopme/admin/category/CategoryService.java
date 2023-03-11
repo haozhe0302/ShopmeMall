@@ -14,7 +14,7 @@ import java.util.*;
 @Service
 @Transactional
 public class CategoryService {
-    private static final int ROOT_CATEGORIES_PRE_PAGE = 4;
+    public static final int CATEGORIES_PRE_PAGE = 4;
 
     @Autowired
     private CategoryRepository repo;
@@ -30,7 +30,7 @@ public class CategoryService {
             sort = sort.descending();
         }
 
-        Pageable pageable = PageRequest.of(pageNum - 1, ROOT_CATEGORIES_PRE_PAGE, sort);
+        Pageable pageable = PageRequest.of(pageNum - 1, CATEGORIES_PRE_PAGE, sort);
         Page<Category> pageCategories = repo.findRootCategories(pageable);
         List<Category> rootCategories =  pageCategories.getContent();
 

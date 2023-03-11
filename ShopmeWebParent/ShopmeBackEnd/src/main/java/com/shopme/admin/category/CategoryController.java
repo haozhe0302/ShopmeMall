@@ -3,6 +3,7 @@ package com.shopme.admin.category;
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,15 +24,44 @@ public class CategoryController {
     private CategoryService service;
 
     @GetMapping("/categories")
-    public String listAll(@Param("sortDir") String sortDir, Model model) {
+    public String listFirstPage(@Param("sortDir") String sortDir, Model model) {
+        return listByPage(1, sortDir, model);
+    }
+
+    @GetMapping("/categories/listAll")
+    public String listAll(Model model){
+        List<Category> listCategories = service.listAll();
+        model.addAttribute("listCategories", listCategories);
+        return "categories/categories";
+    }
+
+    @GetMapping("/categories/page/{pageNum}")
+    public String listByPage(@PathVariable(name = "pageNum") int pageNum, @Param("sortDir") String sortDir, Model model) {
         if (sortDir == null || sortDir.isEmpty()) {
             // Set default sorting order as ascending.
             sortDir = "asc";
         }
 
-        List<Category> listCategories = service.listAll(sortDir);
+        CategoryPageInfo pageInfo = new CategoryPageInfo();
+        List<Category> listCategories = service.listByPage(pageInfo, pageNum, sortDir);
+
         String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc" ;
 
+        long startCount = (long) (pageNum - 1) * CategoryService.CATEGORIES_PRE_PAGE + 1;
+        long endCount = (startCount) + CategoryService.CATEGORIES_PRE_PAGE - 1;
+        if (endCount > pageInfo.getTotalElements()){
+            endCount = pageInfo.getTotalElements();
+        }
+
+        model.addAttribute("totalPages", pageInfo.getTotalPages());
+        model.addAttribute("totalItems", pageInfo.getTotalElements());
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("startPage", Math.max(1, pageNum - 3));
+        model.addAttribute("endPage", Math.min(pageInfo.getTotalPages(), pageNum + 3));
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("sortField", "name");
+        model.addAttribute("sortDir", sortDir);
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("reverseSortDir", reverseSortDir);
 

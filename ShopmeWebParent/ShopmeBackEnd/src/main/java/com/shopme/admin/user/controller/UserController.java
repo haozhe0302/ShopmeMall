@@ -42,7 +42,7 @@ public class UserController {
     public String listAll(Model model){
         List<User> listUsers = service.listAll();
         model.addAttribute("listUsers", listUsers);
-        return "users";
+        return "users/users";
     }
 
     @GetMapping("/users/page/{pageNum}")

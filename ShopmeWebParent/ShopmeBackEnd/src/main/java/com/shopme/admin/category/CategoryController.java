@@ -1,6 +1,7 @@
 package com.shopme.admin.category;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.user.UserService;
 import com.shopme.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -39,9 +40,21 @@ public class CategoryController {
         List<Category> listCategories = service.listByPage(pageInfo, pageNum, sortDir);
         String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc" ;
 
+        long startCount = (long) (pageNum - 1) * UserService.USER_PRE_PAGE + 1;
+        long endCount = (startCount) + UserService.USER_PRE_PAGE - 1;
+        if (endCount > pageInfo.getTotalElements()){
+            endCount = pageInfo.getTotalElements();
+        }
+
         model.addAttribute("totalPages", pageInfo.getTotalPages());
         model.addAttribute("totalItems", pageInfo.getTotalElements());
         model.addAttribute("currentPage", pageNum);
+        model.addAttribute("startPage", Math.max(1, pageNum - 3));
+        model.addAttribute("endPage", Math.min(pageInfo.getTotalPages(), pageNum + 3));
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("sortField", "name");
+        model.addAttribute("sortDir", sortDir);
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("reverseSortDir", reverseSortDir);
 

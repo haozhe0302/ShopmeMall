@@ -19,7 +19,7 @@
 
     <!-- Category Search Box -->
     <div>
-        <form th:action="@{/ategories/page/1}" class="form-inline m-3">
+        <form th:action="@{/categories/page/1}" class="form-inline m-3">
             <label>
                 <input type="search" name="keyword" th:value="${keyword}" class="form-control" style="width: 200px;" required />
             </label>
@@ -38,7 +38,7 @@
                     <th class="hideable-column">ID</th>
                     <th>Image</th>
                     <th>
-                        <a class="text-white" th:href="@{'/categories?sortDir=' + ${reverseSortDir}}">Name</a>
+                        <a class="text-white" th:href="@{'/categories/page/' + ${pageNum} + '?sortDir=' + ${reverseSortDir}}">Name</a>
                         <span th:class="${reverseSortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
                     </th>
                     <th>Alias</th>

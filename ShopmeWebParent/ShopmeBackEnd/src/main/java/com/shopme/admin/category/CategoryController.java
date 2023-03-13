@@ -49,7 +49,7 @@ public class CategoryController {
 
         long startCount = (long) (pageNum - 1) * CategoryService.CATEGORIES_PRE_PAGE + 1;
         long endCount = (startCount) + CategoryService.CATEGORIES_PRE_PAGE - 1;
-        if (endCount > pageInfo.getTotalElements()){
+        if (endCount > pageInfo.getTotalElements()) {
             endCount = pageInfo.getTotalElements();
         }
 

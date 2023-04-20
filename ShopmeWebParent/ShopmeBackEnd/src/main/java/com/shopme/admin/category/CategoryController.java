@@ -1,6 +1,7 @@
 package com.shopme.admin.category;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.category.export.CategoryCsvExporter;
 import com.shopme.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
@@ -139,5 +141,12 @@ public class CategoryController {
         }
 
         return "redirect:/categories";
+    }
+
+    @GetMapping("/categories/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<Category> listCategories = service.listCategoriesUsedInForm();
+        CategoryCsvExporter exporter = new CategoryCsvExporter();
+        exporter.export(listCategories, response);
     }
 }

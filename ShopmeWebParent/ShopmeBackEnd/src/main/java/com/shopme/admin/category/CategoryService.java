@@ -23,7 +23,7 @@ public class CategoryService {
         return (List<Category>) repo.findAll(Sort.by("name").ascending());
     }
 
-    public List<Category> listByPage(CategoryPageInfo pageInfo, int pageNum, String sortDir) {
+    public List<Category> listByPage(CategoryPageInfo pageInfo, int pageNum, String sortDir, String keyword) {
         Sort sort = Sort.by("name");
         if (sortDir == null || sortDir.isEmpty()) {
             // Set default sorting order as ascending.
@@ -35,13 +35,29 @@ public class CategoryService {
         }
 
         Pageable pageable = PageRequest.of(pageNum - 1, CATEGORIES_PRE_PAGE, sort);
-        Page<Category> pageCategories = repo.findRootCategories(pageable);
+
+        Page<Category> pageCategories = null;
+        if (keyword != null && ! keyword.isEmpty()) {
+            pageCategories = repo.search(keyword, pageable);
+        } else {
+            pageCategories = repo.findRootCategories(pageable);
+        }
+
         List<Category> rootCategories = pageCategories.getContent();
 
         pageInfo.setTotalElements(pageCategories.getTotalElements());
         pageInfo.setTotalPages(pageCategories.getTotalPages());
 
-        return listHierarchicalCategories(rootCategories, sortDir);
+        if (keyword != null && ! keyword.isEmpty()) {
+            List<Category> searchResult = pageCategories.getContent();
+            for (Category category : searchResult) {
+                category.setHasChildren(category.getChildren().size() > 0);
+            }
+
+            return searchResult;
+        } else {
+            return listHierarchicalCategories(rootCategories, sortDir);
+        }
     }
 
     private List<Category> listHierarchicalCategories(List<Category> rootCategories, String sortDir) {

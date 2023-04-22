@@ -35,25 +35,25 @@
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="table-dark"> <!--In the lastest version of bootstrap use table-dark instead of thead-dark -->
                 <tr>
-                    <th class="hideable-column">ID</th>
+                    <th>ID</th>
                     <th>Image</th>
                     <th>
-                        <a class="text-white" th:href="@{'/categories/page/' + ${pageNum} + '?sortDir=' + ${reverseSortDir}}">Name</a>
+                        <a class="text-white" th:href="@{'/categories/page/' + ${pageNum} + '?sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Name</a>
                         <span th:class="${reverseSortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
                     </th>
-                    <th>Alias</th>
+                    <th class="hideable-column">Alias</th>
                     <th>Enabled</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="category : ${listCategories}">
-                    <td class="hideable-column">[[${category.id}]]</td>
+                    <td>[[${category.id}]]</td>
                     <td>
                         <img th:src="@{${category.imagePath}}" style="height: 100px" class="img-fluid"/>
                     </td>
                     <td>[[${category.name}]]</td>
-                    <td>[[${category.alias}]]</td>
+                    <td class="hideable-column">[[${category.alias}]]</td>
                     <td>
                         <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green" th:href="@{'/categories/' + ${category.id} + '/enabled/false/'}" title = "Disable Category"></a>
                         <a th:if="${category.enabled == false}" class="fas fa-solid fa-circle-xmark fa-2x icon-grey" th:href="@{'/categories/' + ${category.id} + '/enabled/true/'}" title = "Enable Category"></a>
@@ -67,6 +67,25 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <!-- Showing table for small screen -->
+    <div class="less-details">
+        <div th:each="category : ${listCategories}" class="row m-1">
+            <div class="col-4">
+                <img th:src="@{${category.imagePath}}" style="width: 100px" class="img-fluid"/>
+            </div>
+            <div class="col-8">
+                <div>[[${category.name}]]</div>
+
+                <div class="mt-2">
+                    <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green" th:href="@{'/categories/' + ${category.id} + '/enabled/false/'}" title = "Disable Category"></a>
+                    <a th:if="${category.enabled == false}" class="fas fa-solid fa-circle-xmark fa-2x icon-grey" th:href="@{'/categories/' + ${category.id} + '/enabled/true/'}" title = "Enable Category"></a>
+                    <a class="fas fa-edit fa-2x icon-green" th:href="@{'/categories/edit/' + ${category.id}}" title="Edit Category"></a>&nbsp;<a class="fas fa-trash fa-2x icon-grey link-delete" th:href="@{'/categories/delete/' + ${category.id}}" th:entityId="${category.id}" title="Delete Category"></a>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+        </div>
     </div>
 
     <!-- Pagination -->

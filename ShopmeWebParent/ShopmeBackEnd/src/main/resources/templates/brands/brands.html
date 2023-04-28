@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Brandss - Shopme Admin')" />
+
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation :: nav_menu"></div>
+
+    <!-- Brand Exporter -->
+    <div>
+        <h2>Manage Brands</h2>
+        <a th:href="@{/brands/new}" class="fa-solid fa-folder-plus fa-2x icon-grey mr-2" title="Create New Brand"></a>
+        <a th:href="@{/brands/export/csv}" class="fa-solid fa-file-csv fa-2x icon-grey mr-2" title="Export to CSV"></a>
+    </div>
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
+    <!-- Brand Search Box -->
+    <div>
+        <form th:action="@{/categories/page/1}" class="form-inline m-3">
+            <label>
+                <input type="search" name="keyword" th:value="${keyword}" class="form-control" style="width: 200px;" required />
+            </label>
+            &nbsp;&nbsp;
+            <button type="submit" class="btn btn-primary" title="Search"><i class="fas fa-search"></i></button>
+            &nbsp;&nbsp;
+            <button type="button" class="btn btn-secondary" onclick="clearFilter()" title="Clear Filter"><i class="fas fa-eraser"></i></button>
+        </form>
+    </div>
+
+    <!-- Brand Info Table -->
+    <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="table-dark"> <!--In the lastest version of bootstrap use table-dark instead of thead-dark -->
+            <tr>
+                <th>ID</th>
+                <th>Logo</th>
+                <th>Name</th>
+                <th>Categories</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="brand : ${listBrands}">
+                <td>[[${brand.id}]]</td>
+                <td>
+                    <img th:src="@{${brand.logoPath}}" style="height: 100px" class="img-fluid"/>
+                </td>
+                <td>[[${brand.name}]]</td>
+                <td>
+                    <th:block th:each="category : ${brand.categories}">
+                        <!-- Use bg-secondary instead of badge-secondary in Bootstrap V5 -->
+                        <span class="badge bg-secondary" th:text="${category.name}"></span>
+                    </th:block>
+                </td>
+                <td>
+                    <a class="fas fa-edit fa-2x icon-green" th:href="@{'/brands/edit/' + ${brand.id}}" title="Edit Brand"></a>
+                    &nbsp;
+                    <a class="fas fa-trash fa-2x icon-grey link-delete" th:href="@{'/brands/delete/' + ${brand.id}}" th:entityId="${brand.id}" title="Delete Brand"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Showing table for small screen -->
+    <div class="less-details">
+        <div th:each="brand : ${listBrands}" class="row m-1">
+            <div class="col-4">
+
+            </div>
+            <div class="col-8">
+                <div>[[${brand.name}]]</div>
+
+                <div class="mt-2">
+                    <a class="fas fa-edit fa-2x icon-green" th:href="@{'/brands/edit/' + ${brand.id}}" title="Edit Brand"></a>&nbsp;<a class="fas fa-trash fa-2x icon-grey link-delete" th:href="@{'/brands/delete/' + ${brand.id}}" th:entityId="${brand.id}" title="Delete Brand"></a>
+                </div>
+            </div>
+            <div>&nbsp;</div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="text-center m-1" th:if="${totalItems > 0}">
+        <span>Showing brands # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+    </div>
+
+    <div class="text-center m-1" th:unless="${totalItems > 0}">
+        <span>No brand Found</span>
+    </div>
+
+    <div th:if="${totalPages > 1}">
+        <nav>
+            <ul class="pagination justify-content-center flex-wrap">
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/categories/page/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">&laquo;</a></li>
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/categories/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">&lt;</a></li>
+
+                <!-- List all pages -->
+                <!--
+                <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(1, totalPages)}">
+                    <a class="page-link" th:href="@{'/users/page/' + ${i}}">[[${i}]]</a>
+                </li>
+                -->
+
+                <!-- List only max 7 pages (± 3 pages) -->
+                <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                    <a class="page-link" th:href="@{'/categories/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">[[${i}]]</a>
+                </li>
+
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/categories/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">&gt;</a></li>
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/categories/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">&raquo;</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Dialog Box -->
+    <div class="modal fade text-center" id="confirmModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="confirmText"></span><br>
+                    <span id="confirmEmail"></span><br>
+                    <span id="confirmWarning"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <a class="btn btn-success" href="" id="yesButton">Yes</a>
+                    <button type="button" class="btn btn btn-danger" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: footer"></div>
+</div>
+
+<script type="text/javascript">
+    function showDeleteConfirmModal(link, entityName) {
+        entityId = link.attr("entityId");
+
+        $("#yesButton").attr("href", link.attr("href"));
+        $("#confirmText").text("Are you sure you want to delete this " + entityName + " ID " + entityId + "?")
+        $("#confirmWarning").text("Please note that the DELETE operation is NOT REVERSIBLE");
+        $("#confirmModal").modal('show');
+    }
+
+    function clearFilter() {
+        window.location = "[[@{/brands}]]";
+    }
+
+    $(document).ready(function() {
+        $(".link-delete").on("click", function(e) {
+            e.preventDefault();
+            showDeleteConfirmModal($(this), 'brand');
+        });
+    });
+</script>
+
+</body>
+</html>

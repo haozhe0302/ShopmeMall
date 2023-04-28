@@ -34,11 +34,10 @@
                 <!-- Categories select list-->
                 <label class="col-sm-4 col-form-label">Select one or more categories :</label>
                 <div class="col-sm-8">
-                    <select name="select[]" class="form-control" th:field="*{categories}" multiple required style="resize: vertical; height: 200px">
-                        <th:block th:each="category : ${listCategories}">
-                            <option th:value="${category.id}">[[${category.name}]]</option>
-                        </th:block>
-                    </select>
+                    <th:block th:each="category : ${listCategories}">
+                        <!-- Dropdown box not working properly. Temporarily replaced with check box-->
+                        <input type="checkbox" th:field="*{categories}" th:text="${category.name}" th:value="${category.id}" class="m-2"/><br>
+                    </th:block>
                 </div>
             </div>
 

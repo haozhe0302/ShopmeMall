@@ -39,6 +39,10 @@
                         </th:block>
                     </select>
                 </div>
+
+                <!-- Display all selected categories -->
+                <label class="col-sm-4 col-form-label">Selected: </label>
+                <div id="chosenCategories"></div>
             </div>
 
             <div class="text-center">
@@ -88,6 +92,25 @@
         $("#modalTitle").text(title);
         $("#modalBody").text(message);
         $("#modalDialog").modal('show');
+    }
+
+    $(document).ready(function(){
+        dropdownCategories = $("#categories");
+        divChosenCategories = $("#chosenCategories");
+
+        dropdownCategories.change(function(){
+            showChosenCategories();
+        });
+    });
+
+    function showChosenCategories(){
+        dropdownCategories.children("option:selected").each(function() {
+            selectedCategory = $(this);
+            categoryId = selectedCategory.val();
+            categoryName = selectedCategory.text().replace(/-/g, "");
+
+            divChosenCategories.append("<span class='badge bg-secondary m-1'>" + categoryName + "</span>")
+        });
     }
 </script>
 

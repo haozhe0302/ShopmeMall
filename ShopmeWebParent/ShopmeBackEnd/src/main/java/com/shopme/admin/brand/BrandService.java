@@ -2,6 +2,7 @@ package com.shopme.admin.brand;
 
 import java.util.*;
 
+import com.shopme.common.entity.Category;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,23 @@ public class BrandService {
         }
 
         repo.deleteById(id);
+    }
+
+    public String checkUnique(Integer id, String name) {
+        boolean isCreatingNew = (id == null || id == 0);
+
+        Brand brandByName =  repo.findByName(name);
+
+        if(isCreatingNew) {
+            if (brandByName != null) {
+                return "Duplicate";
+            }
+        } else {
+            if (brandByName != null && !Objects.equals(brandByName.getId(), id)) {
+                return "Duplicate";
+            }
+        }
+
+        return "OK";
     }
 }

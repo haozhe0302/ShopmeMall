@@ -34,6 +34,7 @@ public class CategoryController {
     public String listAll(Model model){
         List<Category> listCategories = service.listAll();
         model.addAttribute("listCategories", listCategories);
+
         return "categories/categories";
     }
 

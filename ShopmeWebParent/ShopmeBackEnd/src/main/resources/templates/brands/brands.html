@@ -35,7 +35,7 @@
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="table-dark"> <!--In the lastest version of bootstrap use table-dark instead of thead-dark -->
             <tr>
-                <th>ID</th>
+                <th class="hideable-column">ID</th>
                 <th>Logo</th>
                 <th>
                     <a class="text-white" th:href="@{'/brands/page/' + ${pageNum} + '?sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Name</a>
@@ -47,7 +47,7 @@
             </thead>
             <tbody>
             <tr th:each="brand : ${listBrands}">
-                <td>[[${brand.id}]]</td>
+                <td class="hideable-column">[[${brand.id}]]</td>
                 <td>
                     <img th:src="@{${brand.logoPath}}" style="height: 100px" class="img-fluid"/>
                 </td>
@@ -72,7 +72,7 @@
     <div class="less-details">
         <div th:each="brand : ${listBrands}" class="row m-1">
             <div class="col-4">
-
+                <img th:src="@{${brand.logoPath}}" style="width: 100px" class="img-fluid"/>
             </div>
             <div class="col-8">
                 <div>[[${brand.name}]]</div>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head(${pageTitle})"><title></title></head>
+
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation :: nav_menu"></div>
+
+    <div>
+        <h2>Manage Products | [[${pageTitle}]]</h2>
+    </div>
+
+    <form th:action="@{/products/save}" method="post" th:object="${product}">
+        <input type="hidden" th:field="*{id}" />
+        <div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#overview" role="tab">Overview</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#description" role="tab">Description</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#images" role="tab">Images</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#details" role="tab">Details</a>
+                </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Overview Content -->
+                <div class="tab-pane active p-3" id="overview" role="tabpanel">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Name :</label>
+                        <div class="col-sm-10">
+                            <input  type="text" class="form-control" th:field="*{name}" required minlength="3" maxlength="256"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Alias :</label>
+                        <div class="col-sm-10">
+                            <input  type="text" class="form-control" th:field="*{alias}" placeholder="Default as product name (spaces replaced by dashes)" minlength="3" maxlength="256"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Brand :</label>
+                        <div class="col-sm-10">
+                            <select th:field="*{brand}" class="form-control" required>
+                                <th:block th:each="brand : ${listBrands}">
+                                    <option th:value="${brand.id}">[[${brand.name}]]</option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Category :</label>
+                        <div class="col-sm-10">
+                            <select th:field="*{category}" class="form-control" required>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Enabled :</label>
+                        <div class="col-sm-10">
+                            <input  type="checkbox" th:field="*{enabled}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">In-Stock :</label>
+                        <div class="col-sm-10">
+                            <input  type="checkbox" th:field="*{inStock}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Cost :</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" th:field="*{cost}"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Price :</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" th:field="*{price}" required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Discount :</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" th:field="*{discountPercent}"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description Content -->
+                <div class="tab-pane" id="description" role="tabpanel">
+
+                </div>
+
+                <!-- Images Content -->
+                <div class="tab-pane" id="images" role="tabpanel">Images</div>
+
+                <!-- Details Content -->
+                <div class="tab-pane" id="details" role="tabpanel">Details</div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <input type="submit" value="Save" class="btn btn-primary m-3"/>
+            <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel"/>
+        </div>
+    </form>
+
+    <!-- Dialog Box -->
+    <div class="modal fade text-center" id="modalDialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalTitle">Warning</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <span id="modalBody"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn btn-warning" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments :: footer"></div>
+</div>
+
+<script type="text/javascript">
+    moduleURL = "[[@{/products}]]";
+    brandModuleURL = "[[@{/brands}]]";
+    dropdownBrands = $("#brand");
+    dropdownCategories = $("#category");
+
+    function showImageThumbnail(fileInput){
+        var file = fileInput.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e){
+            $("#thumbnail").attr("src", e.target.result);
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    function showModalDialog(title, message){
+        $("#modalTitle").text(title);
+        $("#modalBody").text(message);
+        $("#modalDialog").modal('show');
+    }
+
+    function checkUnique(form) {
+        brandId = $("#id").val()
+        brandName = $("#name").val();
+
+        csrfVal = $("input[name='_csrf']").val();
+
+        url = "[[@{/products/check_unique}]]";
+
+        params = {id : brandId, name : brandName, _csrf : csrfVal};
+
+        $.post(url, params, function(response) {
+            if (response === "OK") {
+                form.submit();
+            } else if (response === "Duplicate") {
+                showModalDialog("Warning", "Another brand existed with the same name " + brandName);
+            } else {
+                showModalDialog("Error", "Unknown response from server");
+            }
+        }).fail(function () {
+            showModalDialog("Error", "Could not connect to server");
+        });
+
+        return false;
+    }
+
+    $(document).ready(function() {
+        dropdownBrands.change(function() {
+            dropdownCategories.empty();
+            getCategories();
+        });
+        getCategories();
+    });
+
+    function getCategories() {
+        brandId = dropdownBrands.val();
+        url = brandModuleURL + "/" + brandId + "/categories";
+        $.get(url, function (responseJson) {
+            $.each(responseJson, function(index, category) {
+                $("<option>").val(category.id).text(category.name).appendTo(dropdownCategories);
+            });
+        });
+    }
+
+</script>
+
+<script type="text/javascript" th:src="@{/js/common_form.js}"></script>
+
+</body>
+
+</html>

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: page_head(${pageTitle})"><title></title></head>
+<head>
+    <head th:replace="fragments :: page_head(${pageTitle})"><title></title></head>
+    <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+    <script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+</head>
 
 <body>
 <div class="container-fluid">
@@ -104,7 +108,14 @@
 
                 <!-- Description Content -->
                 <div class="tab-pane" id="description" role="tabpanel">
-
+                    <div class="m-2">
+                        <label>Short Description: </label>
+                        <textarea class="form-control" th:field="*{shortDescription}" rows="5" required></textarea>
+                    </div>
+                    <div class="m-2">
+                        <label>Full Description: </label>
+                        <textarea class="form-control" th:field="*{fullDescription}" rows="10" required></textarea>
+                    </div>
                 </div>
 
                 <!-- Images Content -->
@@ -192,6 +203,10 @@
     }
 
     $(document).ready(function() {
+
+        $("#shortDescription").richText();
+        $("#fullDescription").richText();
+
         dropdownBrands.change(function() {
             dropdownCategories.empty();
             getCategories();

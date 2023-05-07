@@ -1,5 +1,6 @@
 package com.shopme.admin.product;
 
+import java.util.*;
 import com.shopme.common.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -16,5 +17,20 @@ public class ProductService {
         return (List<Product>) repo.findAll(Sort.by("name").ascending());
     }
 
+    public Product save(Product product) {
+        if (product.getId() == null) {
+            product.setCreatedTime(new Date());
+        }
 
+        if (product.getAlias() == null || product.getAlias().isEmpty()) {
+            String defaultAlias = product.getName().replaceAll(" ", "-");
+            product.setAlias(defaultAlias);
+        } else {
+            product.setAlias(product.getAlias().replaceAll(" ", "-"));
+        }
+
+        product.setUpdatedTime(new Date());
+        
+        return repo.save(product);
+    }
 }

@@ -14,7 +14,7 @@
         <h2>Manage Products | [[${pageTitle}]]</h2>
     </div>
 
-    <form th:action="@{/products/save}" method="post" th:object="${product}">
+    <form th:action="@{/products/save}" method="post" onsubmit="return checkUnique(this)" th:object="${product}">
         <input type="hidden" th:field="*{id}" />
         <div>
             <!-- Nav tabs -->
@@ -217,20 +217,20 @@
     }
 
     function checkUnique(form) {
-        brandId = $("#id").val()
-        brandName = $("#name").val();
+        productId = $("#id").val()
+        productName = $("#name").val();
 
         csrfVal = $("input[name='_csrf']").val();
 
         url = "[[@{/products/check_unique}]]";
 
-        params = {id : brandId, name : brandName, _csrf : csrfVal};
+        params = {id : productId, name : productName, _csrf : csrfVal};
 
         $.post(url, params, function(response) {
             if (response === "OK") {
                 form.submit();
             } else if (response === "Duplicate") {
-                showModalDialog("Warning", "Another brand existed with the same name " + brandName);
+                showModalDialog("Warning", "Another product existed with the same name " + productName);
             } else {
                 showModalDialog("Error", "Unknown response from server");
             }

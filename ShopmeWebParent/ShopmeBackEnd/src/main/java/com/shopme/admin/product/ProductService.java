@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductService {
     @Autowired
     private ProductRepository repo;
@@ -48,5 +50,9 @@ public class ProductService {
         }
 
         return "OK";
+    }
+
+    public void updateProductEnabledStatus(Integer id, boolean enabled) {
+        repo.updateEnabledStatus(id, enabled);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.shopme.admin.brand.BrandService;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -50,6 +51,29 @@ public class ProductController {
     public String saveProduct(Product product, RedirectAttributes ra) {
         productService.save(product);
         ra.addFlashAttribute("message", "The product has been saved successfully.");
+
+        return "redirect:/products";
+    }
+
+    @GetMapping("/products/{id}/enabled/{status}")
+    public String updateCategoryEnabledStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes) {
+        productService.updateProductEnabledStatus(id, enabled);
+        String status = enabled? "enabled" : "disenabled";
+        String message = "The Product ID " + id + " has been " + status;
+        redirectAttributes.addFlashAttribute("message", message);
+
+        return "redirect:/products";
+    }
+
+    @GetMapping("/products/delete/{id}")
+    public String deleteProduct(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            productService.delete(id);
+
+            redirectAttributes.addFlashAttribute("message", "The product ID " + id + " has been deleted successfully");
+        } catch (ProductNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
 
         return "redirect:/products";
     }

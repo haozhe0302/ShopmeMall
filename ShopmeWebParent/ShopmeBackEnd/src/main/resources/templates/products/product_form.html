@@ -14,7 +14,7 @@
         <h2>Manage Products | [[${pageTitle}]]</h2>
     </div>
 
-    <form th:action="@{/products/save}" method="post" onsubmit="return checkUnique(this)" th:object="${product}">
+    <form th:action="@{/products/save}" method="post" onsubmit="return checkUnique(this)" enctype="multipart/form-data" th:object="${product}">
         <input type="hidden" th:field="*{id}" />
         <div>
             <!-- Nav tabs -->
@@ -122,7 +122,19 @@
                 </div>
 
                 <!-- Images Content -->
-                <div class="tab-pane p-3" id="images" role="tabpanel">Images</div>
+                <div class="tab-pane p-3" id="images" role="tabpanel">
+                    <div class="row">
+                        <div class="col border m-3 p-2">
+                            <div><label>Main Image:</label></div>
+                            <div class="m-2">
+                                <img id="thumbnail" alt="Main Image Preview" class="img-fluid" th:src="@{${product.mainImagePath}}" />
+                            </div>
+                            <div>
+                                <input type="file" class="form-control" id="fileImage" name="fileImage" accept="image/png image/jpeg" onchange="previewMainImage(event)" required/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Details Content -->
                 <div class="tab-pane p-3" id="details" role="tabpanel">Details</div>
